@@ -13,12 +13,37 @@ public class MapSorter<T> {
 		return list;
 	}
 	
+	public List<T> sortLong(Map<T, Long> map) {
+		LongValueComparator bvc =  new LongValueComparator(map);
+		List<T> list = new ArrayList<T>();
+		list.addAll(map.keySet());
+		Collections.sort(list, bvc);
+		return list;
+	}
+	
 	public List<T> sortDouble(Map<T, Double> map) {
 		DoubleValueComparator bvc =  new DoubleValueComparator(map);
 		List<T> list = new ArrayList<T>();
 		list.addAll(map.keySet());
 		Collections.sort(list, bvc);
 		return list;
+	}
+	
+	class LongValueComparator implements Comparator<T> {
+
+		Map<T, Long> map;
+		public LongValueComparator(Map<T, Long> map) {
+			this.map = map;
+		}
+
+		// Note: this comparator imposes orderings that are inconsistent with equals.    
+		public int compare(T a, T b) {
+			if (map.get(a) < map.get(b)) {
+				return 1;
+			} else {
+				return -1;
+			} // returning 0 would merge keys
+		}
 	}
 	
 	class IntValueComparator implements Comparator<T> {
