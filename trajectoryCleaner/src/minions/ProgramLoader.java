@@ -2,6 +2,7 @@ package minions;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -14,6 +15,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import util.FileSystem;
@@ -63,7 +65,7 @@ public class ProgramLoader {
 		File astDir = new File(assnDir, "asts");
 		return loadCountMap(astDir);
 	}
-	
+
 	public static Map<String, String> loadIdMap() {
 		File assnDir = FileSystem.getAssnDir();
 		File astDir = new File(assnDir, "asts");
@@ -107,7 +109,7 @@ public class ProgramLoader {
 		if(!countFile.exists()) return null;
 		return FileSystem.getFileMap(countFile);
 	}
-	
+
 	private static Map<String, String> loadIdMap(File dir) {
 		File idMapFile = new File(dir, "idMap.txt");
 		if(!idMapFile.exists()) return null;
@@ -174,11 +176,36 @@ public class ProgramLoader {
 	// LOAD XML PROGRAMS
 	//---------------------------
 
+	public static Program programFromXml(String programId, String xml, int unitTestResult) {
+		try {
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			InputSource is = new InputSource(new StringReader(xml));
+			Document doc = dBuilder.parse(is);
+			doc.getDocumentElement().normalize();
+			Node e = doc.getDocumentElement();
+			ProgramLoader loader = new ProgramLoader(programId);
+			Tree t = loader.loadXmlTree(e);
+			return new Program(programId, xml, t, 1, unitTestResult);
+		} catch (SAXException e1) {
+			System.out.println(e1);
+			System.out.println("Failed to parse: " + programId);
+		} catch (IOException e1) {
+			System.out.println(e1);
+			System.out.println("Failed to parse: " + programId);
+		} catch (ParserConfigurationException e1) {
+			System.out.println(e1);
+			System.out.println("Failed to parse: " + programId);
+		}
+		return null;
+	}
+
 	private static Program loadXmlProgram(File f, Map<String, Integer> countMap, Map<String, Integer> unitTestMap) {
 		String programId = FileSystem.getNameWithoutExtension(f.getName());
+		String xml = FileSystem.getFileContents(f);
 		try {
 
-			String xml = FileSystem.getFileContents(f);
+
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(f);
@@ -363,4 +390,5 @@ public class ProgramLoader {
 		}
 		return null;
 	}
+
 }

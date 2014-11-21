@@ -22,7 +22,7 @@ import java.util.Set;
 
 public class FileSystem {
 
-	private static final String dataDirPath = "../data";
+	private static final String dataDirPath = "../dataRaw";
 
 	private static String assnId = null;
 
@@ -73,6 +73,27 @@ public class FileSystem {
 			codeIn = new Scanner(file);
 			while (codeIn.hasNextLine()) {
 				content.add(codeIn.nextLine());
+			}
+			codeIn.close();
+			return content;
+		} catch(Exception e) {
+			if(codeIn != null)codeIn.close();
+			return null;
+		} 
+	}
+	
+	public static List<String> getFileLines(File f, int max) {
+		Scanner codeIn = null;
+		int done = 0;
+		try {
+			ArrayList<String> content = new ArrayList<String>();
+			codeIn = new Scanner(f);
+			while (codeIn.hasNextLine()) {
+				content.add(codeIn.nextLine());
+				done++;
+				if(max > 0 && done >= max) {
+					break;
+				}
 			}
 			codeIn.close();
 			return content;
