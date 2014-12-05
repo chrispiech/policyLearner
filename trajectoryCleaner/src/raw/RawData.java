@@ -43,7 +43,7 @@ public class RawData {
 		char first = string.charAt(0);
 		char last = string.charAt(string.length() - 1);
 		Warnings.check(first == '"', "not in quotes");
-		Warnings.check(last == '"', "not in quotes");
+		if(last != '"') return null;
 		return string.substring(1, string.length() - 1);
 	}
 	

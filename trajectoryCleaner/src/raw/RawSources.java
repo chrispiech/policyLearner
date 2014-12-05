@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import minions.BlocklyHelper;
+import minions.CorruptedException;
 import minions.ProgramLoader;
 import minions.ProgramSaver;
 import models.ast.Program;
@@ -29,11 +30,25 @@ public class RawSources {
 		Map<String, Tree> programMap = new HashMap<String, Tree>();
 		for(String line : lines) {
 			String[] cols = line.split(",");
+			if(cols.length != 6) {
+				corrupted++;
+				continue;
+			}
 			String xml = RawData.stripQuotes(cols[3]);
+			if(xml == null) {
+				corrupted++;
+				continue;
+			}
 			xml = RawData.replaceUnquote(xml);
 
 			String sourceId = cols[0];
-			Program p = ProgramLoader.programFromXml(sourceId, xml, 100);
+			Program p = null;
+			try{
+				p = ProgramLoader.programFromXml(sourceId, xml, 100);
+			}catch(CorruptedException e) {
+				corrupted++;
+				continue;
+			}
 
 			if(p != null) {
 				Tree t = p.getAst();

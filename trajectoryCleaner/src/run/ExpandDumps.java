@@ -29,7 +29,7 @@ import models.trajectory.Trajectory;
  */
 public class ExpandDumps {
 	
-	private static final String LEVEL_DIR = "hoc1";
+	private static final String LEVEL_DIR = "hoc2";
 
 	private Map<String, String> xmlAstIdMap = null;
 

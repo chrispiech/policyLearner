@@ -357,7 +357,7 @@ public class ProgramLoader {
 		}
 		//System.out.println("ERROR");
 		//System.out.println(original);
-		throw new RuntimeException("unhandeled: " + xmlNode.getNodeName());
+		throw new CorruptedException("unhandeled: " + xmlNode.getNodeName());
 	}
 
 	private boolean isXmlType(Node n, String type) {
