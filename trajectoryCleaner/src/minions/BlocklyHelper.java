@@ -50,6 +50,18 @@ public class BlocklyHelper {
 		}
 		return type;
 	}
+	
+	public static boolean hasIllegalBlocks(Tree t) {
+		if(t.isType("maze_dig")) return true;
+		if(t.isType("karel_if")) return true;
+		if(t.isType("pilePresent")) return true;
+		for(Tree child : t.getChildren()) {
+			if(hasIllegalBlocks(child)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public static int getNumBlocks(Tree t) {
 		int numBlocks = 0;

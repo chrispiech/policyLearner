@@ -28,11 +28,13 @@ import models.trajectory.Trajectory;
  *     of ordering).
  */
 public class ExpandDumps {
+	
+	private static final String LEVEL_DIR = "hoc1";
 
 	private Map<String, String> xmlAstIdMap = null;
 
 	private void run() {
-		FileSystem.setAssnId("hoc4");
+		FileSystem.setAssnId(LEVEL_DIR);
 		RawData raw = loadDumps();
 		expandAsts(raw);
 		expandTrajectories(raw);

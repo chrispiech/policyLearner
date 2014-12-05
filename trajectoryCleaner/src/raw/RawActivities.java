@@ -31,7 +31,6 @@ public class RawActivities {
 		for(String l: activities) {
 			String[] cols = l.split(",");
 			String userId = cols[USER_ID_INDEX];
-			userId = stripQuotes(userId);
 			if (!userRowMap.containsKey(userId)) {
 				userRowMap.put(userId, new ArrayList<String>());
 			}
@@ -78,12 +77,12 @@ public class RawActivities {
 
 	private static int getAttempt(String row) {
 		String[] cols = row.split(",");
-		return Integer.parseInt(stripQuotes(cols[ATTEMPT_COL_INDEX]));
+		return Integer.parseInt(cols[ATTEMPT_COL_INDEX]);
 	}
 
 	private static Long getLinuxTime(String row) {
 		String[] cols = row.split(",");
-		String timeStamp = stripQuotes(cols[TIME_STAMP_INDEX]);
+		String timeStamp = RawData.stripQuotes(cols[TIME_STAMP_INDEX]);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		try {
 			Date date = sdf.parse(timeStamp);
@@ -96,18 +95,14 @@ public class RawActivities {
 		throw new RuntimeException("todo");
 	}
 
-	private static String stripQuotes(String string) {
-		return string.substring(1, string.length() - 1);
-	}
-
 	public static String getXmlId(String activity) {
 		String[] cols = activity.split(",");
-		return stripQuotes(cols[SOURCE_COL_INDEX]);
+		return cols[SOURCE_COL_INDEX];
 	}
 
 	public static int getUnitTest(String activity) {
 		String[] cols = activity.split(",");
-		return Integer.parseInt(stripQuotes(cols[UNIT_TEST_COL_INDEX]));
+		return Integer.parseInt(cols[UNIT_TEST_COL_INDEX]);
 	}
 
 

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import util.FileSystem;
+import util.Warnings;
 import models.ast.Tree;
 
 public class RawData {
@@ -28,8 +29,22 @@ public class RawData {
 	
 	private List<String> loadActivities() {
 		File dumpDir = new File(FileSystem.getAssnDir(), "dumps");
-		File sourceDumpFile = new File(dumpDir, "activitiesDump.csv");
-		return FileSystem.getFileLines(sourceDumpFile);
+		File sourceDumpFile = new File(dumpDir, "activities.csv");
+		List<String> lines = FileSystem.getFileLines(sourceDumpFile);
+		
+		return lines.subList(1, lines.size());
+	}
+	
+	public static String replaceUnquote(String xml) {
+		return xml.replace("\\\"","\"");
+	}
+
+	public static String stripQuotes(String string) {
+		char first = string.charAt(0);
+		char last = string.charAt(string.length() - 1);
+		Warnings.check(first == '"', "not in quotes");
+		Warnings.check(last == '"', "not in quotes");
+		return string.substring(1, string.length() - 1);
 	}
 	
 }

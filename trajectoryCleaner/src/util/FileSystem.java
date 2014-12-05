@@ -22,7 +22,7 @@ import java.util.Set;
 
 public class FileSystem {
 
-	private static final String dataDirPath = "../dataRaw";
+	private static final String dataDirPath = "../data";
 
 	private static String assnId = null;
 
