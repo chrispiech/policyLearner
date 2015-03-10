@@ -18,7 +18,7 @@ import util.Warnings;
 
 public class VanillaComment {
 
-	private static final String ASSN_ID = "hoc4";
+	private static final String ASSN_ID = "hoc1";
 
 	private Map<String, Program> programMap;
 	private DirectedGraph<String> policy;
@@ -27,7 +27,7 @@ public class VanillaComment {
 		FileSystem.setAssnId(ASSN_ID);
 		
 		// First load all of the programs..
-		List<Program> programs = ProgramLoader.loadPrograms(1000);
+		List<Program> programs = ProgramLoader.loadPrograms(10000);
 		programMap = new HashMap<String, Program>();
 		for(Program p : programs) {
 			String id = p.getId();
@@ -35,8 +35,10 @@ public class VanillaComment {
 		}
 		
 		// Then make a comment for each edge in the policy.
-		policy = GraphLoader.loadPolicy("nodeRank.txt");
-		for(String currId : policy.outgoingSet()) {
+		policy = GraphLoader.loadGraph("policy.txt");
+		for(int i = 1; i < 1000; i++) {
+			String currId = i + "";
+			if(!policy.containsVertex(currId)) continue;
 			Set<String> outgoing = policy.getOutgoing(currId);
 			Warnings.check(outgoing.size() == 1, "must be 1");
 			String nextId = outgoing.iterator().next();
@@ -59,7 +61,7 @@ public class VanillaComment {
 		System.out.println("move: " + move);
 		
 		System.out.println("\n");
-		throw new RuntimeException("this is just a test");
+		//throw new RuntimeException("this is just a test");
 	}
 
 	public static void main(String[] args) {
